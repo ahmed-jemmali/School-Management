@@ -1,12 +1,14 @@
 package com.spring.smbackend.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -19,11 +21,12 @@ public class Classroom {
     private String name;
     @JsonBackReference
     @OneToMany(mappedBy = "classroom")
-    Collection<Student> students;
+    private Collection<Student> students;
     @ManyToOne
-    Section section;
-    @ManyToMany
-    Collection<Teacher> teachers;
+    private Section section;
+    @JsonIgnore
+    @ManyToMany(mappedBy = "classrooms")
+    private Set<Teacher> teachers;
 }
 //TODO Super() : class extents class
 //TODO LOCAL VARIABLE ET GLOBAL VARIABLE: const, let and var in if(), function(), and for()

@@ -23,8 +23,8 @@ public class Department {
     private String name;
     @JsonBackReference
     @OneToMany(mappedBy = "department")
-    Collection<Hall> halls;
+    private Collection<Hall> halls;
     @NotNull(message = "School must not be null")
     @ManyToOne
-    School school;
+    private School school;
 }

@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -21,5 +21,9 @@ public class Teacher {
     private String address;
     private String description;
     @ManyToMany
-    Collection<Classroom> classrooms;
+    @JoinTable(name = "teacher_classroom",
+            joinColumns = @JoinColumn(name = "teacher_id"),
+            inverseJoinColumns = @JoinColumn(name = "classroom_id")
+    )
+    private Set<Classroom> classrooms;
 }

@@ -21,5 +21,5 @@ public class Hall {
     private String floor;
     @NotNull(message = "Department must not be null")
     @ManyToOne
-    Department department;
+    private Department department;
 }

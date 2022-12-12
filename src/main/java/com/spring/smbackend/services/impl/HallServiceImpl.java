@@ -37,7 +37,7 @@ public class HallServiceImpl implements HallService {
         newHall.setFloor(hallDto.getFloor());
         newHall.setDepartment(department);
         this.hallRepository.save(newHall);
-        return ResponseEntity.status(200).body(newHall);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override
