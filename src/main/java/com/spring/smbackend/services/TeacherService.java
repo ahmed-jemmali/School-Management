@@ -1,20 +1,20 @@
 package com.spring.smbackend.services;
 
 import com.spring.smbackend.entities.Teacher;
+import com.spring.smbackend.models.TeacherDto;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface TeacherService {
 
-    void createTeacher(Teacher teacher);
+    ResponseEntity<Teacher> createTeacher(TeacherDto teacherDto);
 
-    List<Teacher> findAll();
+    ResponseEntity<List<Teacher>> findAll();
 
-    Teacher findTeacherById(Long id);
+    ResponseEntity<Teacher> findTeacherById(Long id);
 
-    List<Teacher> findTeacherByName(String name);
+    ResponseEntity<Teacher> updateTeacher(TeacherDto teacherDto, Long id);
 
-    void updateTeacher(Teacher teacher);
-
-    void deleteTeacher(Long id);
+    ResponseEntity<String> deleteTeacher(Long id);
 }

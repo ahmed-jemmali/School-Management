@@ -7,8 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ClassroomModel {
+public class SchoolDto {
     private Long id;
     private String name;
-    private Long sectionId;
+    private String address;
+    private String description;
 }

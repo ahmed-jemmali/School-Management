@@ -60,6 +60,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         List<Department> departmentList = this.departmentRepository.findDepartmentsByName(departmentDto.getName());
         Stream<Department> departmentListFinal = departmentList.stream().filter(department -> !Objects.equals(department.getId(), departmentDto.getId()));
         if (!departmentListFinal.toList().isEmpty()) return ResponseEntity.badRequest().build();
+        newDepartment.setId(departmentDto.getId());
         newDepartment.setName(departmentDto.getName());
         newDepartment.setSchool(school);
         this.departmentRepository.save(newDepartment);

@@ -33,6 +33,7 @@ public class HallServiceImpl implements HallService {
         List<Hall> hallList = this.hallRepository.findHallsByNameAndDepartment(hallDto.getName(), department);
         if (!hallList.isEmpty()) return ResponseEntity.badRequest().build();
         Hall newHall = new Hall();
+        newHall.setId(hallDto.getId());
         newHall.setName(hallDto.getName());
         newHall.setFloor(hallDto.getFloor());
         newHall.setDepartment(department);

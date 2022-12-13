@@ -7,13 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class StudentModel {
+public class SectionDto {
     private Long id;
     private String name;
-    private int age;
-    private String parentName;
-    private String phoneNumber;
-    private String email;
-    private String address;
-    private Long classroomId;
+    private Long schoolId;
 }

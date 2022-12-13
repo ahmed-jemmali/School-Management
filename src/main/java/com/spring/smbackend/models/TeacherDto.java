@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeacherModel {
+public class TeacherDto {
     private Long id;
     private String name;
     private String phoneNumber;
