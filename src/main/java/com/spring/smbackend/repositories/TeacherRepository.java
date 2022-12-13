@@ -11,7 +11,5 @@ import java.util.List;
 @Transactional
 @Repository
 public interface TeacherRepository extends JpaRepository<Teacher, Long> {
-    List<Teacher> findTeacherByName(@Param("name") String name);
-
     List<Teacher> findTeachersByNameAndEmail(String name, String email);
 }

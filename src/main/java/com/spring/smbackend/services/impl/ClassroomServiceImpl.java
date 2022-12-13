@@ -1,8 +1,11 @@
 package com.spring.smbackend.services.impl;
 
 import com.spring.smbackend.entities.Classroom;
+import com.spring.smbackend.exceptions.ResourceNotFoundException;
+import com.spring.smbackend.models.ClassroomDto;
 import com.spring.smbackend.repositories.ClassroomRepository;
 import com.spring.smbackend.services.ClassroomService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,32 +20,35 @@ public class ClassroomServiceImpl implements ClassroomService {
     }
 
     @Override
-    public void createClassroom(Classroom classroom) {
-        this.classroomRepository.save(classroom);
+    public ResponseEntity<Classroom> createClassroom(ClassroomDto classroomDto) {
+        return ResponseEntity.status(200).build();
+        //todo to complete
     }
 
     @Override
-    public List<Classroom> findAll() {
-        return this.classroomRepository.findAll();
+    public ResponseEntity<List<Classroom>> findAll() {
+        List<Classroom> classroomList = this.classroomRepository.findAll();
+        return ResponseEntity.status(200).body(classroomList);
     }
 
     @Override
-    public Classroom findClassroomById(Long id) {
-        return this.classroomRepository.findById(id).isPresent() ? this.classroomRepository.findById(id).get() : null;
+    public ResponseEntity<Classroom> findClassroomById(Long id) {
+        Classroom classroom = this.classroomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Classroom does not exist with : " + id));
+        return ResponseEntity.status(200).body(classroom);
     }
 
     @Override
-    public List<Classroom> findClassroomByName(String name) {
-        return this.classroomRepository.findClassroomByName(name);
+    public ResponseEntity<Classroom> updateClassroom(ClassroomDto classroomDto, Long id) {
+        return ResponseEntity.status(200).build();
+        //todo to complete
     }
 
     @Override
-    public void updateClassroom(Classroom classroom) {
-        this.classroomRepository.save(classroom);
-    }
-
-    @Override
-    public void deleteClassroom(Long id) {
+    public ResponseEntity<String> deleteClassroom(Long id) {
+        this.classroomRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Classroom does not exist with : " + id));
         this.classroomRepository.deleteById(id);
+        return ResponseEntity.status(200).body("Classroom deleted successfully");
     }
 }
