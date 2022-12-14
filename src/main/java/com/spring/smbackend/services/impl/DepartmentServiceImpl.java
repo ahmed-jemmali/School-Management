@@ -58,8 +58,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         School school = this.schoolRepository.findById(departmentDto.getSchoolId())
                 .orElseThrow(() -> new ResourceNotFoundException("School does not exist with id: " + departmentDto.getSchoolId()));
         List<Department> departmentList = this.departmentRepository.findDepartmentsByName(departmentDto.getName());
-        Stream<Department> departmentListFinal = departmentList.stream().filter(department -> !Objects.equals(department.getId(), departmentDto.getId()));
-        if (!departmentListFinal.toList().isEmpty()) return ResponseEntity.badRequest().build();
+        if (departmentList.size() > 0) {
+            Stream<Department> departmentListFinal = departmentList.stream().filter(department -> !Objects.equals(department.getId(), departmentDto.getId()));
+            if (!departmentListFinal.toList().isEmpty()) return ResponseEntity.badRequest().build();
+        }
         newDepartment.setId(departmentDto.getId());
         newDepartment.setName(departmentDto.getName());
         newDepartment.setSchool(school);

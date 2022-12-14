@@ -62,8 +62,10 @@ public class HallServiceImpl implements HallService {
         Department department = this.departmentRepository.findById(hallDto.getDepartmentId())
                 .orElseThrow(() -> new ResourceNotFoundException("Department does not exist with id: " + id));
         List<Hall> hallList = this.hallRepository.findHallsByNameAndDepartment(hallDto.getName(), department);
-        Stream<Hall> hallListFinal = hallList.stream().filter(hall -> !Objects.equals(hall.getId(), hallDto.getId()));
-        if (!hallListFinal.toList().isEmpty()) return ResponseEntity.badRequest().build();
+        if (hallList.size() > 0) {
+            Stream<Hall> hallListFinal = hallList.stream().filter(hall -> !Objects.equals(hall.getId(), hallDto.getId()));
+            if (!hallListFinal.toList().isEmpty()) return ResponseEntity.badRequest().build();
+        }
         newHall.setName(hallDto.getName());
         newHall.setFloor(hallDto.getFloor());
         newHall.setDepartment(department);
