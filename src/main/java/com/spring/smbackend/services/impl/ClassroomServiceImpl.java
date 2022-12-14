@@ -1,28 +1,42 @@
 package com.spring.smbackend.services.impl;
 
 import com.spring.smbackend.entities.Classroom;
+import com.spring.smbackend.entities.School;
+import com.spring.smbackend.entities.Section;
 import com.spring.smbackend.exceptions.ResourceNotFoundException;
 import com.spring.smbackend.models.ClassroomDto;
 import com.spring.smbackend.repositories.ClassroomRepository;
+import com.spring.smbackend.repositories.SchoolRepository;
+import com.spring.smbackend.repositories.SectionRepository;
 import com.spring.smbackend.services.ClassroomService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 public class ClassroomServiceImpl implements ClassroomService {
 
     private final ClassroomRepository classroomRepository;
+    private final SectionRepository sectionRepository;
 
-    public ClassroomServiceImpl(ClassroomRepository classroomRepository) {
+    public ClassroomServiceImpl(ClassroomRepository classroomRepository, SectionRepository sectionRepository) {
         this.classroomRepository = classroomRepository;
+        this.sectionRepository = sectionRepository;
     }
 
     @Override
     public ResponseEntity<Classroom> createClassroom(ClassroomDto classroomDto) {
-        return ResponseEntity.status(200).build();
-        //todo to complete
+        Section section = this.sectionRepository.findById(classroomDto.getSectionId())
+                .orElseThrow(() -> new ResourceNotFoundException("School does not exist with id: " + classroomDto.getSectionId()));
+        Classroom classroom = new Classroom();
+        classroom.setName(classroomDto.getName());
+        classroom.setSection(section);
+        this.classroomRepository.save(classroom);
+        return ResponseEntity.status(200).body(classroom);
+
     }
 
     @Override
@@ -40,8 +54,20 @@ public class ClassroomServiceImpl implements ClassroomService {
 
     @Override
     public ResponseEntity<Classroom> updateClassroom(ClassroomDto classroomDto, Long id) {
-        return ResponseEntity.status(200).build();
-        //todo to complete
+        Classroom newClassroom = this.classroomRepository.findById(classroomDto.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Classroom does not exist with id: " + id));
+        Section section = this.sectionRepository.findById(classroomDto.getSectionId())
+                .orElseThrow(() -> new ResourceNotFoundException("School does not exist with id: " + id));
+        List<Classroom> classroomList = this.classroomRepository.findClassroomByNameAndSection(classroomDto.getName(), section);
+        if (!classroomList.isEmpty()) {
+            Stream<Classroom> classroomListFinal = classroomList.stream().filter(classroom -> !Objects.equals(classroom.getId(), classroomDto.getId()));
+            if (classroomListFinal.toList().isEmpty()) return ResponseEntity.badRequest().build();
+        }
+        newClassroom.setId(classroomDto.getId());
+        newClassroom.setName(classroomDto.getName());
+        newClassroom.setSection(section);
+        this.classroomRepository.save(newClassroom);
+        return ResponseEntity.status(200).body(newClassroom);
     }
 
     @Override
