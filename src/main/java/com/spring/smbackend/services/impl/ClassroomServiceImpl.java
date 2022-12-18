@@ -1,12 +1,10 @@
 package com.spring.smbackend.services.impl;
 
 import com.spring.smbackend.entities.Classroom;
-import com.spring.smbackend.entities.School;
 import com.spring.smbackend.entities.Section;
 import com.spring.smbackend.exceptions.ResourceNotFoundException;
 import com.spring.smbackend.models.ClassroomDto;
 import com.spring.smbackend.repositories.ClassroomRepository;
-import com.spring.smbackend.repositories.SchoolRepository;
 import com.spring.smbackend.repositories.SectionRepository;
 import com.spring.smbackend.services.ClassroomService;
 import org.springframework.http.ResponseEntity;
@@ -30,7 +28,9 @@ public class ClassroomServiceImpl implements ClassroomService {
     @Override
     public ResponseEntity<Classroom> createClassroom(ClassroomDto classroomDto) {
         Section section = this.sectionRepository.findById(classroomDto.getSectionId())
-                .orElseThrow(() -> new ResourceNotFoundException("School does not exist with id: " + classroomDto.getSectionId()));
+                .orElseThrow(() -> new ResourceNotFoundException("Section does not exist with id: " + classroomDto.getSectionId()));
+        List<Classroom> classroomList = this.classroomRepository.findClassroomByNameAndSection(classroomDto.getName(), section);
+        if (!classroomList.isEmpty()) return ResponseEntity.badRequest().build();
         Classroom classroom = new Classroom();
         classroom.setName(classroomDto.getName());
         classroom.setSection(section);

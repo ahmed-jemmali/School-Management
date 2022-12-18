@@ -18,28 +18,33 @@ public class TeacherRestController {
         this.teacherService = teacherService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "teachers")
+    @RequestMapping(method = RequestMethod.POST, value = "/teachers")
     public ResponseEntity<Teacher> createTeacher(@RequestBody TeacherDto teacherDto) {
         return this.teacherService.createTeacher(teacherDto);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "teachers")
+    @RequestMapping(method = RequestMethod.GET, value = "/teachers")
     public ResponseEntity<List<Teacher>> getAllTeachers() {
         return this.teacherService.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "teachers/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/teachers/{id}")
     public ResponseEntity<Teacher> getTeacherById(@PathVariable Long id) {
         return this.teacherService.findTeacherById(id);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "teachers/{id}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/teachers/{id}")
     public ResponseEntity<Teacher> updateTeacher(@RequestBody TeacherDto teacherDto, @PathVariable Long id) {
         return this.teacherService.updateTeacher(teacherDto, id);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "teachers/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/teachers/{id}")
     public ResponseEntity<String> deleteTeacher(@PathVariable Long id) {
         return this.teacherService.deleteTeacher(id);
+    }
+
+    @RequestMapping(method = RequestMethod.PUT, value = "{teacherId}/teachers/{classroomId}")
+    public Teacher assignClassroomToTeacher(@PathVariable Long teacherId, @PathVariable Long classroomId) {
+        return teacherService.assignClassroomToTeacher(teacherId, classroomId);
     }
 }

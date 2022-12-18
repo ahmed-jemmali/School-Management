@@ -18,27 +18,27 @@ public class ClassroomRestController {
         this.classroomService = classroomService;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "classrooms")
+    @RequestMapping(method = RequestMethod.POST, value = "/classrooms")
     public ResponseEntity<Classroom> createClassroom(@RequestBody ClassroomDto classroomDto) {
         return this.classroomService.createClassroom(classroomDto);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "classrooms")
-    public ResponseEntity<List<Classroom>> getAllClassroom() {
+    @RequestMapping(method = RequestMethod.GET, value = "/classrooms")
+    public ResponseEntity<List<Classroom>> getAllClassrooms() {
         return this.classroomService.findAll();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "classrooms/{id}")
+    @RequestMapping(method = RequestMethod.GET, value = "/classrooms/{id}")
     public ResponseEntity<Classroom> getClassroomById(@PathVariable Long id) {
         return this.classroomService.findClassroomById(id);
     }
 
-    @RequestMapping(method = RequestMethod.PUT, value = "classrooms{id}")
+    @RequestMapping(method = RequestMethod.PUT, value = "/classrooms{id}")
     public ResponseEntity<Classroom> updateClassroom(@RequestBody ClassroomDto classroomDto, Long id) {
         return this.classroomService.updateClassroom(classroomDto, id);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "classrooms/{id}")
+    @RequestMapping(method = RequestMethod.DELETE, value = "/classrooms/{id}")
     public ResponseEntity<String> deleteClassroom(@PathVariable Long id) {
         return this.classroomService.deleteClassroom(id);
     }

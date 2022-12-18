@@ -19,12 +19,16 @@ public class Department {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotNull(message = "Name must not be null")
     private String name;
-    @JsonBackReference
+
     @OneToMany(mappedBy = "department")
+    @JsonBackReference
     private Collection<Hall> halls;
+
     @NotNull(message = "School must not be null")
     @ManyToOne
+    @JoinColumn(name = "school_id", referencedColumnName = "id")
     private School school;
 }

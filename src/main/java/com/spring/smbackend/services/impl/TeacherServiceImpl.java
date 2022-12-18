@@ -1,8 +1,10 @@
 package com.spring.smbackend.services.impl;
 
+import com.spring.smbackend.entities.Classroom;
 import com.spring.smbackend.entities.Teacher;
 import com.spring.smbackend.exceptions.ResourceNotFoundException;
 import com.spring.smbackend.models.TeacherDto;
+import com.spring.smbackend.repositories.ClassroomRepository;
 import com.spring.smbackend.repositories.TeacherRepository;
 import com.spring.smbackend.services.TeacherService;
 import org.springframework.http.ResponseEntity;
@@ -10,15 +12,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @Service
 public class TeacherServiceImpl implements TeacherService {
 
     private final TeacherRepository teacherRepository;
+    private final ClassroomRepository classroomRepository;
 
-    private TeacherServiceImpl(TeacherRepository teacherRepository) {
+    private TeacherServiceImpl(TeacherRepository teacherRepository, ClassroomRepository classroomRepository) {
         this.teacherRepository = teacherRepository;
+        this.classroomRepository = classroomRepository;
     }
 
     @Override
@@ -62,6 +67,17 @@ public class TeacherServiceImpl implements TeacherService {
                 .orElseThrow(() -> new ResourceNotFoundException("Teacher does not exist with id: " + id));
         this.teacherRepository.deleteById(id);
         return ResponseEntity.status(200).body("Teacher deleted successfully");
+    }
+
+    @Override
+    public Teacher assignClassroomToTeacher(Long teacherId, Long classroomId) {
+        Set<Classroom> classroomSet = null;
+        Teacher teacher = this.teacherRepository.findById(teacherId).get();//todo question to getOne()
+        Classroom classroom = this.classroomRepository.findById(classroomId).get();
+        classroomSet = teacher.getClassrooms();
+        classroomSet.add(classroom);
+        teacher.setClassrooms(classroomSet);
+        return this.teacherRepository.save(teacher);
     }
 
     private ResponseEntity<Teacher> getTeacherResponseEntity(TeacherDto teacherDto, Teacher teacher) {
