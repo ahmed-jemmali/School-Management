@@ -18,5 +18,5 @@ public interface TeacherService {
 
     ResponseEntity<String> deleteTeacher(Long id);
 
-    Teacher assignClassroomToTeacher(Long teacherId, Long classroomId);
+    ResponseEntity<Teacher> assignClassroomToTeacher(Long teacherId, Long classroomId);
 }

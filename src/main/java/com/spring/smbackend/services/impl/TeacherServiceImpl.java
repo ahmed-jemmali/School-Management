@@ -70,14 +70,19 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Teacher assignClassroomToTeacher(Long teacherId, Long classroomId) {
+    public ResponseEntity<Teacher> assignClassroomToTeacher(Long teacherId, Long classroomId) {
         Set<Classroom> classroomSet = null;
-        Teacher teacher = this.teacherRepository.findById(teacherId).get();//todo question to getOne()
-        Classroom classroom = this.classroomRepository.findById(classroomId).get();
+        Teacher teacher = this.teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher does not exist with id: " + teacherId));
+        Classroom classroom = this.classroomRepository.findById(classroomId)
+                .orElseThrow(() -> new ResourceNotFoundException("Classroom does not exist with id: " + classroomId));
         classroomSet = teacher.getClassrooms();
+        if (classroomSet.contains(classroom))
+            throw new RuntimeException("This classroom is already assigned for this teacher");
         classroomSet.add(classroom);
         teacher.setClassrooms(classroomSet);
-        return this.teacherRepository.save(teacher);
+        this.teacherRepository.save(teacher);
+        return ResponseEntity.status(200).body(teacher);
     }
 
     private ResponseEntity<Teacher> getTeacherResponseEntity(TeacherDto teacherDto, Teacher teacher) {

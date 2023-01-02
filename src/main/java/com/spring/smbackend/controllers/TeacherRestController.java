@@ -44,7 +44,7 @@ public class TeacherRestController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, value = "{teacherId}/teachers/{classroomId}")
-    public Teacher assignClassroomToTeacher(@PathVariable Long teacherId, @PathVariable Long classroomId) {
+    public ResponseEntity<Teacher> assignClassroomToTeacher(@PathVariable Long teacherId, @PathVariable Long classroomId) {
         return teacherService.assignClassroomToTeacher(teacherId, classroomId);
     }
 }

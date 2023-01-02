@@ -61,7 +61,7 @@ public class ClassroomServiceImpl implements ClassroomService {
         List<Classroom> classroomList = this.classroomRepository.findClassroomByNameAndSection(classroomDto.getName(), section);
         if (!classroomList.isEmpty()) {
             Stream<Classroom> classroomListFinal = classroomList.stream().filter(classroom -> !Objects.equals(classroom.getId(), classroomDto.getId()));
-            if (classroomListFinal.toList().isEmpty()) return ResponseEntity.badRequest().build();
+            if (!classroomListFinal.toList().isEmpty()) return ResponseEntity.badRequest().build();
         }
         newClassroom.setId(classroomDto.getId());
         newClassroom.setName(classroomDto.getName());
