@@ -1,8 +1,10 @@
 package com.spring.smbackend.services.impl;
 
 import com.spring.smbackend.entities.Student;
+import com.spring.smbackend.exceptions.ResourceNotFoundException;
 import com.spring.smbackend.repositories.StudentRepository;
 import com.spring.smbackend.services.StudentService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,18 +24,16 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public List<Student> findAll() {
-        return this.studentRepository.findAll();
+    public ResponseEntity<List<Student>> findAll() {
+        List<Student> studentList = this.studentRepository.findAll();
+        return ResponseEntity.status(200).body(studentList);
     }
 
     @Override
-    public Student findStudentById(Long id) {
-        return this.studentRepository.findById(id).isPresent() ? this.studentRepository.findById(id).get() : null;
-    }
-
-    @Override
-    public List<Student> findStudentByName(String name) {
-        return this.studentRepository.findStudentByName(name);
+    public ResponseEntity<Student> findStudentById(Long id) {
+        Student student = this.studentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Student does not exist with id: " + id));
+        return ResponseEntity.status(200).body(student);
     }
 
     @Override
@@ -42,7 +42,10 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
-    public void deleteStudent(Long id) {
+    public ResponseEntity<String> deleteStudent(Long id) {
+        this.studentRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Student does not exist with id: " + id));
         this.studentRepository.deleteById(id);
+        return ResponseEntity.status(200).body("Student deleted successfully");
     }
 }
