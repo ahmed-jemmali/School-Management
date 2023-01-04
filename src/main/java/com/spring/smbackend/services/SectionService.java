@@ -1,20 +1,15 @@
 package com.spring.smbackend.services;
 
 import com.spring.smbackend.entities.Section;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface SectionService {
 
-    void createSection(Section section);
+    ResponseEntity<List<Section>> findAll();
 
-    List<Section> findAll();
+    ResponseEntity<Section> findSectionById(Long id);
 
-    Section findSectionById(Long id);
-
-    List<Section> findSectionByName(String name);
-
-    void updateSection(Section section);
-
-    void deleteSection(Long id);
+    ResponseEntity<String> deleteSection(Long id);
 }

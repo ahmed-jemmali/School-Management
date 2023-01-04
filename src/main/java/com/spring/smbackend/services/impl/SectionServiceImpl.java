@@ -1,8 +1,10 @@
 package com.spring.smbackend.services.impl;
 
 import com.spring.smbackend.entities.Section;
+import com.spring.smbackend.exceptions.ResourceNotFoundException;
 import com.spring.smbackend.repositories.SectionRepository;
 import com.spring.smbackend.services.SectionService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,32 +19,23 @@ public class SectionServiceImpl implements SectionService {
     }
 
     @Override
-    public void createSection(Section section) {
-        this.sectionRepository.save(section);
+    public ResponseEntity<List<Section>> findAll() {
+        List<Section> sectionList = this.sectionRepository.findAll();
+        return ResponseEntity.status(200).body(sectionList);
     }
 
     @Override
-    public List<Section> findAll() {
-        return this.sectionRepository.findAll();
+    public ResponseEntity<Section> findSectionById(Long id) {
+        Section section = this.sectionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Section does not exist with id: " + id));
+        return ResponseEntity.status(200).body(section);
     }
 
     @Override
-    public Section findSectionById(Long id) {
-        return this.sectionRepository.findById(id).isPresent() ? this.sectionRepository.findById(id).get() : null;
-    }
-
-    @Override
-    public List<Section> findSectionByName(String name) {
-        return this.sectionRepository.findSectionByName(name);
-    }
-
-    @Override
-    public void updateSection(Section section) {
-        this.sectionRepository.save(section);
-    }
-
-    @Override
-    public void deleteSection(Long id) {
+    public ResponseEntity<String> deleteSection(Long id) {
+        this.sectionRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Section does not exist with id: " + id));
         this.sectionRepository.deleteById(id);
+        return ResponseEntity.status(200).body("Section deleted successfully");
     }
 }
