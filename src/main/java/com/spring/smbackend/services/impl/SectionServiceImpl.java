@@ -1,7 +1,10 @@
 package com.spring.smbackend.services.impl;
 
+import com.spring.smbackend.entities.School;
 import com.spring.smbackend.entities.Section;
 import com.spring.smbackend.exceptions.ResourceNotFoundException;
+import com.spring.smbackend.models.SectionDto;
+import com.spring.smbackend.repositories.SchoolRepository;
 import com.spring.smbackend.repositories.SectionRepository;
 import com.spring.smbackend.services.SectionService;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +16,24 @@ import java.util.List;
 public class SectionServiceImpl implements SectionService {
 
     private final SectionRepository sectionRepository;
+    private final SchoolRepository schoolRepository;
 
-    public SectionServiceImpl(SectionRepository sectionRepository) {
+    public SectionServiceImpl(SectionRepository sectionRepository, SchoolRepository schoolRepository) {
         this.sectionRepository = sectionRepository;
+        this.schoolRepository = schoolRepository;
+    }
+
+    @Override
+    public ResponseEntity<Section> createSection(SectionDto sectionDto) {
+        School school = this.schoolRepository.findById(sectionDto.getSchoolId())
+                .orElseThrow(() -> new ResourceNotFoundException(""));
+        List<Section> sectionList = this.sectionRepository.findSectionsByName(sectionDto.getName());
+        if (sectionList != null && sectionList.size() > 0) return ResponseEntity.badRequest().build();
+        Section section = new Section();
+        section.setName(section.getName());
+        section.setSchool(school);
+        this.sectionRepository.save(section);
+        return ResponseEntity.status(200).body(section);
     }
 
     @Override

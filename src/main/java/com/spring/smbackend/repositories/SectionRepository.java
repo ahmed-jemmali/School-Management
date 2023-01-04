@@ -11,5 +11,5 @@ import java.util.List;
 @Transactional
 @Repository
 public interface SectionRepository extends JpaRepository<Section, Long> {
-    List<Section> findSectionByName(@Param("name") String name);
+    List<Section> findSectionsByName(@Param("name") String name);
 }
