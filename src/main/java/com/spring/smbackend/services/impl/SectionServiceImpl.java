@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Stream;
 
 @Service
 public class SectionServiceImpl implements SectionService {
@@ -26,14 +28,11 @@ public class SectionServiceImpl implements SectionService {
     @Override
     public ResponseEntity<Section> createSection(SectionDto sectionDto) {
         School school = this.schoolRepository.findById(sectionDto.getSchoolId())
-                .orElseThrow(() -> new ResourceNotFoundException(""));
+                .orElseThrow(() -> new ResourceNotFoundException("School does not exist with id: " + sectionDto.getSchoolId()));
         List<Section> sectionList = this.sectionRepository.findSectionsByName(sectionDto.getName());
         if (sectionList != null && sectionList.size() > 0) return ResponseEntity.badRequest().build();
         Section section = new Section();
-        section.setName(section.getName());
-        section.setSchool(school);
-        this.sectionRepository.save(section);
-        return ResponseEntity.status(200).body(section);
+        return this.getSectionResponseEntity(sectionDto, section, school);
     }
 
     @Override
@@ -47,6 +46,28 @@ public class SectionServiceImpl implements SectionService {
         Section section = this.sectionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Section does not exist with id: " + id));
         return ResponseEntity.status(200).body(section);
+    }
+
+    @Override
+    public ResponseEntity<Section> updateSection(SectionDto sectionDto, Long id) {
+        Section newSection = this.sectionRepository.findById(sectionDto.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Section does not exist with id: " + id));
+        School school = this.schoolRepository.findById(sectionDto.getSchoolId())
+                .orElseThrow(() -> new ResourceNotFoundException("School does not exist with id: " + sectionDto.getSchoolId()));
+        List<Section> sectionList = this.sectionRepository.findSectionsByName(sectionDto.getName());
+        if (sectionList != null && !sectionList.isEmpty()) {
+            Stream<Section> sectionStream = sectionList.stream().filter(section -> !Objects.equals(section.getId(), sectionDto.getId()));
+            if (!sectionStream.toList().isEmpty()) return ResponseEntity.badRequest().build();
+        }
+        newSection.setId(sectionDto.getId());
+        return this.getSectionResponseEntity(sectionDto, newSection, school);
+    }
+
+    private ResponseEntity<Section> getSectionResponseEntity(SectionDto sectionDto, Section newSection, School school) {
+        newSection.setName(sectionDto.getName());
+        newSection.setSchool(school);
+        this.sectionRepository.save(newSection);
+        return ResponseEntity.status(200).body(newSection);
     }
 
     @Override

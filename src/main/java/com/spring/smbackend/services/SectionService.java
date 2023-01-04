@@ -14,5 +14,7 @@ public interface SectionService {
 
     ResponseEntity<Section> findSectionById(Long id);
 
+    ResponseEntity<Section> updateSection(SectionDto sectionDto, Long id);
+
     ResponseEntity<String> deleteSection(Long id);
 }

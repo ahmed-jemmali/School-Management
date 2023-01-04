@@ -50,7 +50,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public ResponseEntity<Teacher> updateTeacher(TeacherDto teacherDto, Long id) {
         Teacher newTeacher = this.teacherRepository.findById(teacherDto.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(""));
+                .orElseThrow(() -> new ResourceNotFoundException("Teacher does not exist with id: " + id));
         List<Teacher> teacherList = this.teacherRepository.findTeachersByNameAndEmail(teacherDto.getName(), teacherDto.getEmail());
         if (teacherList.size() > 0) {
             Stream<Teacher> teacherListFinal = teacherList.stream().filter(teacher -> !Objects.equals(teacher.getId(), teacherDto.getId()));

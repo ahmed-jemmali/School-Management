@@ -57,7 +57,7 @@ public class ClassroomServiceImpl implements ClassroomService {
         Classroom newClassroom = this.classroomRepository.findById(classroomDto.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Classroom does not exist with id: " + id));
         Section section = this.sectionRepository.findById(classroomDto.getSectionId())
-                .orElseThrow(() -> new ResourceNotFoundException("School does not exist with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Section does not exist with id: " + classroomDto.getSectionId()));
         List<Classroom> classroomList = this.classroomRepository.findClassroomByNameAndSection(classroomDto.getName(), section);
         if (!classroomList.isEmpty()) {
             Stream<Classroom> classroomListFinal = classroomList.stream().filter(classroom -> !Objects.equals(classroom.getId(), classroomDto.getId()));

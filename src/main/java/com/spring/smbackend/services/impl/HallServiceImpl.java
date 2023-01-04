@@ -60,7 +60,7 @@ public class HallServiceImpl implements HallService {
         Hall newHall = this.hallRepository.findById(hallDto.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Hall does not exist with id: " + id));
         Department department = this.departmentRepository.findById(hallDto.getDepartmentId())
-                .orElseThrow(() -> new ResourceNotFoundException("Department does not exist with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Department does not exist with id: " + hallDto.getDepartmentId()));
         List<Hall> hallList = this.hallRepository.findHallsByNameAndDepartment(hallDto.getName(), department);
         if (hallList.size() > 0) {
             Stream<Hall> hallListFinal = hallList.stream().filter(hall -> !Objects.equals(hall.getId(), hallDto.getId()));

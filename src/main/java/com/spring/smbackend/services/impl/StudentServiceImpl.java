@@ -51,9 +51,9 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public ResponseEntity<Student> updateStudent(StudentDto studentDto, Long id) {
         Student newStudent = this.studentRepository.findById(studentDto.getId())
-                .orElseThrow(() -> new ResourceNotFoundException(""));
+                .orElseThrow(() -> new ResourceNotFoundException("Student does not exist with id: " + id));
         Classroom classroom = this.classroomRepository.findById(studentDto.getClassroomId())
-                .orElseThrow(() -> new ResourceNotFoundException(""));
+                .orElseThrow(() -> new ResourceNotFoundException("Classroom does not exist with id: " + studentDto.getClassroomId()));
         List<Student> studentList = this.studentRepository.findStudentsByNameAndEmail(studentDto.getName(), studentDto.getEmail());
         if (studentList != null && studentList.size() > 0) {
             Stream<Student> studentListFinal = studentList.stream().filter((student -> !Objects.equals(student.getId(), studentDto.getId())));
