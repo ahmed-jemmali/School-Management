@@ -1,8 +1,10 @@
 package com.spring.smbackend.services.impl;
 
 import com.spring.smbackend.entities.School;
+import com.spring.smbackend.exceptions.ResourceNotFoundException;
 import com.spring.smbackend.repositories.SchoolRepository;
 import com.spring.smbackend.services.SchoolService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,32 +19,25 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
-    public void createSchool(School school) {
-        this.schoolRepository.save(school);
+    public ResponseEntity<List<School>> findAll() {
+        List<School> schoolList = this.schoolRepository.findAll();
+        return ResponseEntity.status(200).body(schoolList);
     }
 
     @Override
-    public List<School> findAll() {
-        return this.schoolRepository.findAll();
+    public ResponseEntity<School> findSchoolById(Long id) {
+        School school = this.schoolRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("School does not exist with id: " + id));
+        return ResponseEntity.status(200).body(school);
     }
 
-    @Override
-    public School findSchoolById(Long id) {
-        return this.schoolRepository.findById(id).isPresent() ? this.schoolRepository.findById(id).get() : null;
-    }
 
     @Override
-    public List<School> findSchoolByName(String name) {
-        return this.schoolRepository.findSchoolByName(name);
-    }
-
-    @Override
-    public void updateSchool(School school) {
-        this.schoolRepository.save(school);
-    }
-
-    @Override
-    public void deleteSchool(Long id) {
+    public ResponseEntity<String> deleteSchool(Long id) {
+        this.schoolRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("School does not exist with id: " + id));
         this.schoolRepository.deleteById(id);
+        return ResponseEntity.status(200).body("School deleted successfully");
+
     }
 }

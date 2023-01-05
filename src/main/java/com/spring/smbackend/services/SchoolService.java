@@ -1,20 +1,16 @@
 package com.spring.smbackend.services;
 
 import com.spring.smbackend.entities.School;
+import com.spring.smbackend.models.SchoolDto;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface SchoolService {
 
-    void createSchool(School school);
+    ResponseEntity<List<School>> findAll();
 
-    List<School> findAll();
+    ResponseEntity<School> findSchoolById(Long id);
 
-    School findSchoolById(Long id);
-
-    List<School> findSchoolByName(String name);
-
-    void updateSchool(School school);
-
-    void deleteSchool(Long id);
+    ResponseEntity<String> deleteSchool(Long id);
 }
