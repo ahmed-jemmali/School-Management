@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface SchoolService {
 
+    ResponseEntity<School> createSchool(SchoolDto schoolDto);
+
     ResponseEntity<List<School>> findAll();
 
     ResponseEntity<School> findSchoolById(Long id);
