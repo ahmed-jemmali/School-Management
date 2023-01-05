@@ -22,11 +22,7 @@ public class SchoolServiceImpl implements SchoolService {
     @Override
     public ResponseEntity<School> createSchool(SchoolDto schoolDto) {
         School school = new School();
-        school.setName(schoolDto.getName());
-        school.setAddress(schoolDto.getAddress());
-        school.setDescription(schoolDto.getDescription());
-        this.schoolRepository.save(school);
-        return ResponseEntity.status(200).body(school);
+        return this.getSchoolResponseEntity(schoolDto, school);
     }
 
     @Override
@@ -43,11 +39,25 @@ public class SchoolServiceImpl implements SchoolService {
     }
 
     @Override
+    public ResponseEntity<School> updateSchool(SchoolDto schoolDto, Long id) {
+        School school = this.schoolRepository.findById(schoolDto.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("School does not exist with id: " + id));
+        return this.getSchoolResponseEntity(schoolDto, school);
+    }
+
+    private ResponseEntity<School> getSchoolResponseEntity(SchoolDto schoolDto, School school) {
+        school.setName(schoolDto.getName());
+        school.setAddress(schoolDto.getAddress());
+        school.setDescription(schoolDto.getDescription());
+        this.schoolRepository.save(school);
+        return ResponseEntity.status(200).body(school);
+    }
+
+    @Override
     public ResponseEntity<String> deleteSchool(Long id) {
         this.schoolRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("School does not exist with id: " + id));
         this.schoolRepository.deleteById(id);
         return ResponseEntity.status(200).body("School deleted successfully");
-
     }
 }

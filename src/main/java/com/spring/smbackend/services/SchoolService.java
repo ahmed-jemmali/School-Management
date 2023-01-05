@@ -14,5 +14,7 @@ public interface SchoolService {
 
     ResponseEntity<School> findSchoolById(Long id);
 
+    ResponseEntity<School> updateSchool(SchoolDto schoolDto, Long id);
+
     ResponseEntity<String> deleteSchool(Long id);
 }
