@@ -23,7 +23,7 @@ public class FirstTimeInitializer implements CommandLineRunner {
         if (userService.findAll().isEmpty()) {
             logger.info("No Users accounts found. Creating some users");
 
-            AppUser user = new AppUser("Ahmed", "ahm.jemmali@gmail.com", "password");
+            AppUser user = new AppUser("Ahmed", "27901748", "Ariana,Tunisia", "ahm.jemmali@gmail.com", "password");
             userService.save(user);
         }
     }

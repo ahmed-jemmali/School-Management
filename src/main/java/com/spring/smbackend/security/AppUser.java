@@ -1,11 +1,9 @@
 package com.spring.smbackend.security;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,20 +11,26 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
+@Table(name = "user")
 public class AppUser implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
+    @NotNull
     private String name;
 
-    @NotEmpty
+    @NotNull
+    private String phoneNumber;
+
+    private String address;
+
+    @NotNull
     @JsonIgnore
     private String email;
 
-    @NotEmpty
+    @NotNull
     private String password;
 
     private Date created;
@@ -34,8 +38,10 @@ public class AppUser implements UserDetails {
     public AppUser() {
     }
 
-    public AppUser(@NotEmpty String name, @NotEmpty String email, @NotEmpty String password) {
+    public AppUser(String name, String phoneNumber, String address, String email, String password) {
         this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
         this.email = email;
         this.password = password;
         this.created = new Date();
@@ -106,5 +112,21 @@ public class AppUser implements UserDetails {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 }
