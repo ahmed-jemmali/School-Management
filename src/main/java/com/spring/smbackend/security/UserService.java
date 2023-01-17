@@ -10,8 +10,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService implements UserDetailsService {
+
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Bean
     private PasswordEncoder passwordEncoder() {
@@ -20,6 +28,15 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return new User("ahm.jemmali@gmail.com", passwordEncoder().encode("password"), AuthorityUtils.NO_AUTHORITIES);
+        return new User("ahmed", passwordEncoder().encode("password"), AuthorityUtils.NO_AUTHORITIES);
+    }
+
+    public void save(AppUser user) {
+        user.setPassword(passwordEncoder().encode(user.getPassword()));
+        this.userRepository.save(user);
+    }
+
+    public List<AppUser> findAll() {
+        return this.userRepository.findAll();
     }
 }
