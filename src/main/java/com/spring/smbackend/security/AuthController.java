@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping( "/api")
+@RequestMapping("/api/auth")
 public class AuthController {
 
     private final TokenUtil tokenUtil;
@@ -21,7 +21,7 @@ public class AuthController {
         this.authenticationManager = authenticationManager;
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/auth")
+    @PostMapping(value = {"", "/"})
     public JwtResponse signIn(@RequestBody SignInRequest signInRequest) {
         final Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(signInRequest.getUsername(), signInRequest.getPassword())
