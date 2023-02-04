@@ -14,7 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
-@Configuration
+@Configuration //Security implementation through java config (no spring xml config)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final String[] PUBLIC_ENDPOINTS = {"/api/auth/**"};
@@ -34,20 +34,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new AuthFilter();
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .cors().and().csrf().disable()
-                .exceptionHandling()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .authorizeRequests()
-                .antMatchers(PUBLIC_ENDPOINTS).permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//                .cors().and().csrf().disable()
+//                .exceptionHandling()
+//                .and()
+//                .sessionManagement()
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                .and()
+//                .authorizeRequests()
+//                .antMatchers(PUBLIC_ENDPOINTS).permitAll()
+//                .anyRequest().authenticated()
+//                .and()
+//                .addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class);
+//        return http.build();
+//    }
 }
+
+/* Storage Types in security: In-memory, JDBC, LDAP ...*/

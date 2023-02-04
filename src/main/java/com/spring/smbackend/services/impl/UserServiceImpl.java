@@ -1,6 +1,9 @@
-package com.spring.smbackend.security;
+package com.spring.smbackend.services.impl;
 
+import com.spring.smbackend.entities.AppUser;
 import com.spring.smbackend.exceptions.ResourceNotFoundException;
+import com.spring.smbackend.repositories.UserRepository;
+import com.spring.smbackend.services.UserService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,12 +13,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService implements UserDetailsService {
+public class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -23,16 +26,18 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         /*return new User("ahmed", passwordEncoder().encode("password"), AuthorityUtils.NO_AUTHORITIES);*/
-        AppUser user = userRepository.findByEmail(username);
-        if (user == null) throw new ResourceNotFoundException("User not found.");
-        return user;
+        List<AppUser> user = userRepository.findByEmail(username);
+        if (user.isEmpty()) throw new ResourceNotFoundException("User not found.");
+        return user.get(0);
     }
 
-    public void save(AppUser user) {
+    @Override
+    public void createUser(AppUser user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         this.userRepository.save(user);
     }
 
+    @Override
     public List<AppUser> findAll() {
         return this.userRepository.findAll();
     }

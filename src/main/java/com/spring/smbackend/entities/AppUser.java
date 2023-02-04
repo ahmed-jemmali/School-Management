@@ -1,4 +1,4 @@
-package com.spring.smbackend.security;
+package com.spring.smbackend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,9 +10,8 @@ import java.util.Collection;
 import java.util.Date;
 
 @Entity
-@Table(name = "user")
+@Table(name = "sec_user")
 public class AppUser implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,10 +25,10 @@ public class AppUser implements UserDetails {
     private String address;
 
     @NotNull
-    @JsonIgnore
     private String email;
 
     @NotNull
+    @JsonIgnore
     private String password;
 
     private Date created;
@@ -128,4 +127,9 @@ public class AppUser implements UserDetails {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    @NotNull(message = "Role must not be null")
+    @ManyToOne
+    @JoinColumn(name = "role_id",referencedColumnName = "id")
+    private Role role;
 }
