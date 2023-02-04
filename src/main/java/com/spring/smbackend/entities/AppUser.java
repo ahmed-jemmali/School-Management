@@ -36,13 +36,14 @@ public class AppUser implements UserDetails {
     public AppUser() {
     }
 
-    public AppUser(String name, String phoneNumber, String address, String email, String password) {
+    public AppUser(String name, String phoneNumber, String address, String email, String password, Role role) {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
         this.email = email;
         this.password = password;
         this.created = new Date();
+        this.role = role;
     }
 
     @Override

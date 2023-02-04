@@ -23,8 +23,4 @@ public class Role {
 
     @NotNull(message = "Name must not be null")
     private String name;
-
-    @OneToMany(mappedBy = "role")
-    @JsonBackReference
-    private Collection<AppUser> users;
 }
