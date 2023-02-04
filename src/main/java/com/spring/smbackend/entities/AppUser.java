@@ -133,4 +133,12 @@ public class AppUser implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "role_id",referencedColumnName = "id")
     private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 }

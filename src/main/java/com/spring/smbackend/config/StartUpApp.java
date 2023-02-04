@@ -15,9 +15,7 @@ import org.springframework.stereotype.Component;
 public class StartUpApp implements CommandLineRunner {
 
     private final Log logger = LogFactory.getLog(StartUpApp.class);
-
     private final UserService userService;
-
     private final RoleService roleService;
 
     @Override
@@ -25,16 +23,16 @@ public class StartUpApp implements CommandLineRunner {
 
         if (roleService.findAll().isEmpty()) {
             logger.info("No roles found. Creating some roles");
-            roleService.createRole(new Role(1L, "admin"));
-            roleService.createRole(new Role(2L, "user"));
-            roleService.createRole(new Role(3L, "teacher"));
-            roleService.createRole(new Role(4L, "student"));
+            roleService.createRole(new Role(null, "admin"));
+            roleService.createRole(new Role(null, "user"));
+            roleService.createRole(new Role(null, "teacher"));
+            roleService.createRole(new Role(null, "student"));
         }
 
         if (userService.findAll().isEmpty()) {
             logger.info("No users accounts found. Creating some users");
             Role role = roleService.findByName("admin");
-            AppUser user = new AppUser("Ahmed Jm", "27901748", "Ariana,Tunisia", "ahm.jemmali@gmail.com", "password", role);
+            AppUser user = new AppUser("Ahmed Jm", "+216 27901748", "Ariana,Tunisia", "ahm.jemmali@gmail.com", "password", role);
             userService.createUser(user);
         }
     }

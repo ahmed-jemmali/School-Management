@@ -1,19 +1,23 @@
 package com.spring.smbackend.services.impl;
 
 import com.spring.smbackend.entities.AppUser;
-import com.spring.smbackend.exceptions.ResourceNotFoundException;
 import com.spring.smbackend.repositories.UserRepository;
 import com.spring.smbackend.services.UserService;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class UserServiceImpl implements UserDetailsService, UserService {
+public class UserServiceImpl implements UserService, UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -21,14 +25,6 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        /*return new User("ahmed", passwordEncoder().encode("password"), AuthorityUtils.NO_AUTHORITIES);*/
-        List<AppUser> user = userRepository.findByEmail(username);
-        if (user.isEmpty()) throw new ResourceNotFoundException("User not found.");
-        return user.get(0);
     }
 
     @Override
@@ -40,5 +36,19 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Override
     public List<AppUser> findAll() {
         return this.userRepository.findAll();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        /*return new User("ahmed", passwordEncoder().encode("password"), AuthorityUtils.NO_AUTHORITIES);*/
+        Optional<AppUser> user = userRepository.findByEmail(username);
+        if (user.isEmpty()) throw new UsernameNotFoundException("User not found.");
+        return new User(user.get().getUsername(), user.get().getPassword(), getAuthorities(user.get()));
+    }
+
+    private static List<GrantedAuthority> getAuthorities(AppUser user) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        if (user.getRole() != null) authorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
+        return authorities;
     }
 }
