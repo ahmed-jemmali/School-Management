@@ -31,5 +31,4 @@ public class WebConfig {
     public AuthenticationManager authenticationManager() throws Exception {
         return authConfiguration.getAuthenticationManager();
     }
-
 }
