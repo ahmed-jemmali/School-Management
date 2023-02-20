@@ -1,14 +1,14 @@
 package com.spring.smbackend.security;
 
-public class SignInRequest {
+public class LoginRequest {
 
     private String username;
     private String password;
 
-    public SignInRequest() {
+    public LoginRequest() {
     }
 
-    public SignInRequest(String username, String password) {
+    public LoginRequest(String username, String password) {
         this.username = username;
         this.password = password;
     }
