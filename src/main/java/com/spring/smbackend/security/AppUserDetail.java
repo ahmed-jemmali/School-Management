@@ -25,10 +25,6 @@ public class AppUserDetail implements UserDetails {
     private Date created;
     private List<GrantedAuthority> authorities;
 
-    public AppUserDetail() {
-        super();
-    }
-
     public AppUserDetail(AppUser user) {
         super();
         this.id = user.getId();
@@ -60,21 +56,21 @@ public class AppUserDetail implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

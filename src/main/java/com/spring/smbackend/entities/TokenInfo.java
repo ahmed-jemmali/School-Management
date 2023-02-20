@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Setter
@@ -16,8 +17,15 @@ public class TokenInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
+    @Column(length = 800)
     private String accessToken;
+
+    @NotBlank
+    @Column(length = 800)
     private String refreshToken;
+
     private String userAgentText;
     private String localIpAddress;
     private String remoteIpAddress;

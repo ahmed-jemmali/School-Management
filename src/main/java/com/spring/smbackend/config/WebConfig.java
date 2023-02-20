@@ -11,12 +11,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class WebConfig {
 
-    private final AuthenticationConfiguration authConfiguration;
-
-    public WebConfig(AuthenticationConfiguration authConfiguration) {
-        this.authConfiguration = authConfiguration;
-    }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -28,7 +22,7 @@ public class WebConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager() throws Exception {
-        return authConfiguration.getAuthenticationManager();
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
     }
 }
