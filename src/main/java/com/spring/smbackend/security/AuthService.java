@@ -37,7 +37,6 @@ public class AuthService {
         log.debug("Valid userDetails credentials");
         AppUserDetail userDetails = (AppUserDetail) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        /*UserDetails userDetails = userService.loadUserByUsername(login);*/
         TokenInfo tokenInfo = createLoginToken(login, userDetails.getId());
         return JwtResponseDto.builder()
                 .accessToken(tokenInfo.getAccessToken())
@@ -64,7 +63,7 @@ public class AuthService {
         TokenInfo tokenInfo = new TokenInfo(accessToken, refreshToken);
         tokenInfo.setUser(new AppUser(userId));
         tokenInfo.setUserAgentText(userAgent);
-        tokenInfo.setLocalIpAddress(ip.getHostAddress());
+        tokenInfo.setLocalIpAddress(ip != null ? ip.getHostAddress() : null);
         tokenInfo.setRemoteIpAddress(httpRequest.getRemoteUser());
         return tokenInfoService.save(tokenInfo);
     }

@@ -35,7 +35,7 @@ public class AppUser {
     private Date created;
 
     @NotNull(message = "Role must not be null")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
